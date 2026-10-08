@@ -120,8 +120,8 @@ export default function Home() {
       fishRef.current?.stop();
       setRebirth((r) => r ?? DEMO_REBIRTH); // 真实结果晚到也不被演示数据覆盖
       setStage("rebirth");
-      setTimeout(() => setBlackingOut(false), 600);
-    }, 1100);
+      setTimeout(() => setBlackingOut(false), 400);
+    }, 500);
   }
 
   function toggleMute() {

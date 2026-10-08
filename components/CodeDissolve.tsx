@@ -18,29 +18,32 @@ export default function CodeDissolve({ code, fast, onLineDissolve, onDone }: Pro
   const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [dissolved, setDissolved] = useState(0);
   const doneRef = useRef(false);
+  // 记录容器相对视口位置，只在开始时读一次，避免每行 layout
+  const boxRectRef = useRef<DOMRect | null>(null);
 
   useEffect(() => {
+    // 预读容器位置，之后只读每行 offsetLeft/Top（不触发布局）
+    boxRectRef.current = containerRef.current?.getBoundingClientRect() ?? null;
+    const stepMs = fast ? 18 : 70;
     const interval = setInterval(() => {
       setDissolved((d) => {
         if (d >= lines.length) return d;
         const el = lineRefs.current[d];
         const box = containerRef.current;
-        if (el && box) {
-          const er = el.getBoundingClientRect();
-          const br = box.getBoundingClientRect();
-          onLineDissolve?.(er.left - br.left + er.width / 2, er.top - br.top + 6);
-          box.scrollTo({ top: el.offsetTop - box.clientHeight / 2 });
+        if (el && box && onLineDissolve) {
+          // 用 offsetTop 拿行在容器内的 Y；X 固定用容器中线即可（粒子本来就有横向摆动）
+          onLineDissolve(box.clientWidth / 2, el.offsetTop + 6);
         }
         return d + 1;
       });
-    }, fast ? 14 : 120);
+    }, stepMs);
     return () => clearInterval(interval);
   }, [fast, lines.length, onLineDissolve]);
 
   useEffect(() => {
     if (dissolved >= lines.length && !doneRef.current) {
       doneRef.current = true;
-      const t = setTimeout(onDone, fast ? 400 : 1400);
+      const t = setTimeout(onDone, fast ? 250 : 800);
       return () => clearTimeout(t);
     }
   }, [dissolved, lines.length, fast, onDone]);
@@ -48,7 +51,7 @@ export default function CodeDissolve({ code, fast, onLineDissolve, onDone }: Pro
   return (
     <div
       ref={containerRef}
-      className="scroll-thin relative max-h-[55vh] overflow-y-auto rounded-lg border border-ink-700 bg-ink-950/80 p-4"
+      className="relative max-h-[55vh] overflow-hidden rounded-lg border border-ink-700 bg-ink-950/80 p-4"
     >
       {lines.map((line, i) => (
         <div

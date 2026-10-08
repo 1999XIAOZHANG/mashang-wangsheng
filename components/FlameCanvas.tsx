@@ -111,12 +111,11 @@ const FlameCanvas = forwardRef<FlameHandle, Props>(function FlameCanvas(
       ctx.clearRect(0, 0, w, h);
 
       if (ambientRef.current) {
-        for (let i = 0; i < 2; i++) {
-          spawn(w * 0.3 + Math.random() * w * 0.4, h * (0.85 + Math.random() * 0.1));
-        }
+        spawn(w * 0.3 + Math.random() * w * 0.4, h * (0.85 + Math.random() * 0.1));
       }
 
       const arr = particles.current;
+      // 一次 batch drawImage：只切一次 globalAlpha 段，减少 canvas 状态切换
       ctx.globalCompositeOperation = "lighter";
       for (let i = arr.length - 1; i >= 0; i--) {
         const p = arr[i];
