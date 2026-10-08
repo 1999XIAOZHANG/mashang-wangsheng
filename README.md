@@ -8,24 +8,17 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css&logoColor=white" alt="Tailwind" />
   <img src="https://img.shields.io/badge/OpenRouter-Multi--Model-7C3AED?logo=openrouter" alt="OpenRouter" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT" />
-  <img src="https://img.shields.io/badge/Kiro_鬼点子-参赛作品-FF6B6B" alt="Kiro" />
 </p>
 
 ## 演示视频
 
-<p align="center">
-  <video src="docs/demo.mp4" controls width="100%"></video>
-</p>
+[👉 点击查看演示视频 docs/demo.mp4](docs/demo.mp4)
 
----
+> GitHub README 不直接渲染 mp4，点上面链接即可在仓库内播放。
 
 ## 这是什么
 
 给死掉的代码办一场体面的**赛博葬礼**。粘贴那段折磨你的祖传代码，选定死因（需求变更 / 过度设计 / 赛博玄学……），AI 法医出具验尸报告，**四家大模型同题竞写悼词**、由你票选谁有资格致悼，随后代码在火焰中化为灰烬，最终由代码模型转世重构、投个好胎——还能下载一张刻着墓志铭的讣告卡片。
-
-**Kiro「鬼点子」计划线上赛参赛作品 · 赛道：无趣之趣**
-
----
 
 ## 五幕仪式流
 
@@ -122,7 +115,7 @@ docs/                        设计方案 + 实现计划 + 演示视频
 
 ## 声明
 
-本讣告由 AI 生成，代码的死亡与重生均为虚构。葬式仅供娱乐，请勿对号入座。
+本项目系 **Kiro「鬼点子」计划 · 线上赛 · 赛道：无用之用** 参赛作品。本讣告由 AI 生成，代码的死亡与重生均为虚构。葬式仅供娱乐，请勿对号入座。
 
 ```
 愿天下代码，死得明白，投得体面。
