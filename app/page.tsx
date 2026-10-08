@@ -10,6 +10,7 @@ import FlameCanvas, { type FlameHandle } from "@/components/FlameCanvas";
 import CodeDissolve from "@/components/CodeDissolve";
 import RebirthCode from "@/components/RebirthCode";
 import ObituaryCard from "@/components/ObituaryCard";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { WoodenFish } from "@/lib/woodenFish";
 import { getCause } from "@/lib/causes";
 import { DEMO_AUTOPSY, DEMO_REBIRTH } from "@/lib/demoData";
@@ -170,6 +171,9 @@ export default function Home() {
         </div>
       )}
 
+      {/* 五幕内容：错误边界兜底，单幕崩溃不污染整页 */}
+      <ErrorBoundary>
+
       {/* 五幕 */}
       {stage === "input" && <CodeInput onEnshrine={handleEnshrine} />}
 
@@ -263,6 +267,8 @@ export default function Home() {
           愿天下代码，死得明白，投得体面
         </p>
       </footer>
+
+      </ErrorBoundary>
 
       {/* 火化结束黑场过渡 */}
       {blackingOut && (
