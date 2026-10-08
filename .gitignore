@@ -25,3 +25,7 @@ yarn-error.log*
 # editor
 .vscode/
 .idea/
+
+# 录制素材（README 演示视频在 docs/demo.mp4，已跟踪，不忽略）
+video.mp4
+*.mov
