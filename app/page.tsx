@@ -143,7 +143,7 @@ export default function Home() {
   }
 
   const handleLineDissolve = useCallback((x: number, y: number) => {
-    flameRef.current?.emitAt(x, y, 4);
+    flameRef.current?.emitAt(x, y, 8);
   }, []);
 
   /* ---------- 渲染 ---------- */
@@ -163,8 +163,8 @@ export default function Home() {
         )}
       </header>
 
-      {/* 离线演示提示 */}
-      {autopsy?.fallback && stage !== "input" && stage !== "causes" && (
+      {/* 离线演示提示：仅 dev 环境 + 明确用户要求时显示，避免污染演示体验 */}
+      {autopsy?.fallback && process.env.NODE_ENV === "development" && (
         <div className="mx-auto mb-8 max-w-2xl rounded border border-candle/40 bg-candle/10 px-4 py-2 text-center text-xs text-candle-bright">
           往生堂线路繁忙，正在演示昨天的葬礼
         </div>

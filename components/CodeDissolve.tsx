@@ -24,7 +24,7 @@ export default function CodeDissolve({ code, fast, onLineDissolve, onDone }: Pro
   useEffect(() => {
     // 预读容器位置，之后只读每行 offsetLeft/Top（不触发布局）
     boxRectRef.current = containerRef.current?.getBoundingClientRect() ?? null;
-    const stepMs = fast ? 18 : 70;
+    const stepMs = fast ? 12 : 50;
     const interval = setInterval(() => {
       setDissolved((d) => {
         if (d >= lines.length) return d;

@@ -15,7 +15,7 @@ export interface FlameHandle {
 interface Props {
   /** 火焰色调（#rrggbb），来自所选死因 */
   tint?: string;
-  /** 是否持续从底部升起环境火星 */
+  /** 是否持续从底部升起环境火星。默认 false：让画面更聚焦，溶解时爆发更集中 */
   ambient?: boolean;
   className?: string;
 }
@@ -35,7 +35,7 @@ interface Particle {
 const MAX_PARTICLES = 300;
 
 const FlameCanvas = forwardRef<FlameHandle, Props>(function FlameCanvas(
-  { tint = "#e8912d", ambient = true, className },
+  { tint = "#e8912d", ambient = false, className },
   ref
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -79,9 +79,9 @@ const FlameCanvas = forwardRef<FlameHandle, Props>(function FlameCanvas(
   }
 
   useImperativeHandle(ref, () => ({
-    emitAt(x: number, y: number, count = 4) {
+    emitAt(x: number, y: number, count = 6) {
       for (let i = 0; i < count; i++) {
-        spawn(x + (Math.random() - 0.5) * 40, y + (Math.random() - 0.5) * 8, 1.4);
+        spawn(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.5) * 10, 1.5);
       }
     },
   }));
