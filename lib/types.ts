@@ -20,6 +20,8 @@ export interface AutopsyReport {
 /** POST /api/autopsy 响应 */
 export interface AutopsyResponse {
   fallback: boolean;
+  /** 是否配置了 API key（区分"真没 key 走 demo" vs "有 key 瞬时失败"） */
+  hasKey?: boolean;
   autopsy: AutopsyReport;
   epitaph: string;
   reincarnation_advice: string;

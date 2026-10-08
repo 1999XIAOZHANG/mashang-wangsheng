@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const hasKey = Boolean(process.env.OPENROUTER_API_KEY);
+
   let input: z.infer<typeof bodySchema>;
   try {
     input = bodySchema.parse(await req.json());
@@ -53,6 +55,7 @@ export async function POST(req: NextRequest) {
     const parsed = autopsyLLMSchema.parse(raw);
     return NextResponse.json({
       fallback: false,
+      hasKey,
       autopsy: {
         ...parsed.autopsy,
         premortem: parsed.autopsy.premortem.length
@@ -67,6 +70,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("[autopsy] 走离线演示:", err instanceof Error ? err.message : err);
-    return NextResponse.json(DEMO_AUTOPSY);
+    return NextResponse.json({ ...DEMO_AUTOPSY, hasKey });
   }
 }

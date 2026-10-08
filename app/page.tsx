@@ -164,8 +164,9 @@ export default function Home() {
         )}
       </header>
 
-      {/* 离线演示提示：仅 dev 环境 + 明确用户要求时显示，避免污染演示体验 */}
-      {autopsy?.fallback && process.env.NODE_ENV === "development" && (
+      {/* 离线演示提示：仅当未配置 API KEY 时显示（真正的演示模式）。
+          有 key 但 fetch 失败属于瞬时抽风，不污染用户体验。 */}
+      {autopsy?.fallback && !autopsy.hasKey && (
         <div className="mx-auto mb-8 max-w-2xl rounded border border-candle/40 bg-candle/10 px-4 py-2 text-center text-xs text-candle-bright">
           往生堂线路繁忙，正在演示昨天的葬礼
         </div>
