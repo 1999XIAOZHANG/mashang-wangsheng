@@ -6,13 +6,11 @@ import CausePicker from "@/components/CausePicker";
 import LoadingRitual from "@/components/LoadingRitual";
 import AutopsyReport from "@/components/AutopsyReport";
 import PKArena from "@/components/PKArena";
-import FlameCanvas, { type FlameHandle } from "@/components/FlameCanvas";
 import CodeDissolve from "@/components/CodeDissolve";
 import RebirthCode from "@/components/RebirthCode";
 import ObituaryCard from "@/components/ObituaryCard";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { WoodenFish } from "@/lib/woodenFish";
-import { getCause } from "@/lib/causes";
 import { DEMO_AUTOPSY, DEMO_REBIRTH } from "@/lib/demoData";
 import type {
   AutopsyResponse,
@@ -44,10 +42,7 @@ export default function Home() {
   const [blackingOut, setBlackingOut] = useState(false);
   const [muted, setMuted] = useState(false);
 
-  const flameRef = useRef<FlameHandle>(null);
   const fishRef = useRef<WoodenFish | null>(null);
-
-  const tint = causes.length > 0 ? getCause(causes[0]).flameColor : "#e8912d";
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -142,18 +137,7 @@ export default function Home() {
   }
 
   const handleIgnite = useCallback(() => {
-    // 整块点燃：沿容器底部多点密集喷发，形成「火海卷起」的视觉
-    if (!flameRef.current) return;
-    const box = document.querySelector(
-      "main .relative.max-h-\\[55vh\\]"
-    ) as HTMLElement | null;
-    if (!box) return;
-    const w = box.clientWidth;
-    const h = box.clientHeight;
-    // 沿底部 12 个点同时喷，每点 6 颗，总 ~72 颗
-    for (let i = 1; i <= 12; i++) {
-      flameRef.current.emitAt((w * i) / 13, h * 0.95, 6);
-    }
+    // 火化现在由 CSS 渐变驱动，无需手动喷粒子
   }, []);
 
   /* ---------- 渲染 ---------- */
@@ -229,15 +213,7 @@ export default function Home() {
           <div className="relative">
             <CodeDissolve
               code={code}
-              fast={false}
-              onIgnite={handleIgnite}
               onDone={handleFlameDone}
-            />
-            <FlameCanvas
-              ref={flameRef}
-              tint={tint}
-              ambient
-              className="pointer-events-none absolute inset-0"
             />
           </div>
           <p className="mt-5 text-center font-kai text-sm text-stele">
