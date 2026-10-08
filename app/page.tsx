@@ -41,7 +41,6 @@ export default function Home() {
   const [chosenModel, setChosenModel] = useState<string | null>(null);
   const [chosenVendor, setChosenVendor] = useState<string | null>(null);
   const [rebirth, setRebirth] = useState<RebirthResponse | null>(null);
-  const [fastBurn, setFastBurn] = useState(false);
   const [blackingOut, setBlackingOut] = useState(false);
   const [muted, setMuted] = useState(false);
 
@@ -140,11 +139,21 @@ export default function Home() {
     setChosenModel(null);
     setChosenVendor(null);
     setRebirth(null);
-    setFastBurn(false);
   }
 
-  const handleLineDissolve = useCallback((x: number, y: number) => {
-    flameRef.current?.emitAt(x, y, 8);
+  const handleIgnite = useCallback(() => {
+    // 整块点燃：沿容器底部多点密集喷发，形成「火海卷起」的视觉
+    if (!flameRef.current) return;
+    const box = document.querySelector(
+      "main .relative.max-h-\\[55vh\\]"
+    ) as HTMLElement | null;
+    if (!box) return;
+    const w = box.clientWidth;
+    const h = box.clientHeight;
+    // 沿底部 12 个点同时喷，每点 6 颗，总 ~72 颗
+    for (let i = 1; i <= 12; i++) {
+      flameRef.current.emitAt((w * i) / 13, h * 0.95, 6);
+    }
   }, []);
 
   /* ---------- 渲染 ---------- */
@@ -215,21 +224,13 @@ export default function Home() {
               >
                 木鱼 {muted ? "关" : "开"}
               </button>
-              {!fastBurn && (
-                <button
-                  onClick={() => setFastBurn(true)}
-                  className="rounded border border-ink-600 px-3 py-1.5 text-stele transition-colors hover:border-candle hover:text-candle-bright"
-                >
-                  加速超度
-                </button>
-              )}
             </div>
           </div>
           <div className="relative">
             <CodeDissolve
               code={code}
-              fast={fastBurn}
-              onLineDissolve={handleLineDissolve}
+              fast={false}
+              onIgnite={handleIgnite}
               onDone={handleFlameDone}
             />
             <FlameCanvas

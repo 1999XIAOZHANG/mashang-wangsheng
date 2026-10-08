@@ -146,7 +146,7 @@ const FlameCanvas = forwardRef<FlameHandle, Props>(function FlameCanvas(
     };
   }, [tint]);
 
-  return <canvas ref={canvasRef} className={className} />;
+  return <canvas ref={canvasRef} className={className} style={{ mixBlendMode: "screen" }} />;
 });
 
 export default FlameCanvas;
