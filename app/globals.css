@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ 电子往生堂 · 主题基底 ============ */
+
+:root {
+  --candle: 232 145 45;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0b0a08;
+  /* 底部烛光晕染 + 顶部压暗，营造灵堂纵深 */
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 110%, rgba(232, 145, 45, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(201, 162, 39, 0.04), transparent 70%);
+}
+
+/* 纸纹噪点覆盖层（营造宣纸/灵堂颗粒感） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: rgba(232, 145, 45, 0.35);
+  color: #fff7ea;
+}
+
+/* 灵堂滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #12100d;
+}
+::-webkit-scrollbar-thumb {
+  background: #362f26;
+  border-radius: 6px;
+  border: 2px solid #12100d;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a227;
+}
+
+/* ============ 工具类 ============ */
+
+@layer utilities {
+  /* 竖排墓志铭 */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.35em;
+  }
+
+  /* 烛光呼吸 */
+  .candle-glow {
+    animation: candleBreath 2.6s ease-in-out infinite;
+  }
+
+  /* 印章 */
+  .seal {
+    font-family: "Kaiti SC", STKaiti, KaiTi, 楷体, serif;
+    border: 2px solid #a63a2b;
+    color: #c14a38;
+    border-radius: 4px;
+    transform: rotate(-4deg);
+  }
+}
+
+/* ============ 关键帧 ============ */
+
+@keyframes candleBreath {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.82; filter: brightness(1.25); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  8% { opacity: 0.6; }
+  12% { opacity: 0.95; }
+  30% { opacity: 0.7; }
+  34% { opacity: 1; }
+  56% { opacity: 0.8; }
+  60% { opacity: 0.98; }
+}
+
+@keyframes floatSlow {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.6; }
+  100% { transform: translateY(-120px) translateX(14px); opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes goldShimmer {
+  0% { text-shadow: 0 0 8px rgba(201, 162, 39, 0.25); }
+  50% { text-shadow: 0 0 22px rgba(230, 200, 110, 0.65), 0 0 4px rgba(255, 235, 190, 0.8); }
+  100% { text-shadow: 0 0 8px rgba(201, 162, 39, 0.25); }
+}
+
+@keyframes pulseOnce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@keyframes marquee {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.fade-in {
+  animation: fadeIn 0.9s ease both;
+}
+
+.flicker {
+  animation: flicker 3.2s linear infinite;
+}
+
+/* 无动画环境兜底：内容永远可见，动画只是锦上添花 */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .fade-in,
+  .flicker,
+  .candle-glow,
+  .line-dissolving {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+/* 火化：代码行溶解 */
+.line-dissolving {
+  opacity: 0 !important;
+  filter: blur(3px);
+  transform: translateY(-26px) scaleX(1.02);
+  transition:
+    opacity 0.9s ease,
+    filter 0.9s ease,
+    transform 0.9s ease;
+}
+
+/* 竖排墓碑上刻字的凿刻感 */
+.epitaph-carved {
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.9),
+    0 -1px 0 rgba(255, 244, 214, 0.12);
+}
