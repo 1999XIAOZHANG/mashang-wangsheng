@@ -120,11 +120,6 @@ export default function PKArena({ autopsy, causes, chosenModel, onChoose, onNext
                   <p className="flex-1 font-kai text-[15px] leading-loose text-stele-light">
                     <TypewriterText text={s.eulogy} tickMs={16} charsPerTick={2} />
                   </p>
-                  {s.fallback && (
-                    <span className="mt-2 self-start rounded bg-candle/10 px-1.5 py-0.5 text-[10px] text-candle">
-                      线路繁忙 · 演示稿
-                    </span>
-                  )}
                   <button
                     onClick={() => onChoose(s)}
                     disabled={chosenModel !== null}
