@@ -10,11 +10,13 @@
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT" />
 </p>
 
-## 演示视频
+## 演示
 
-[👉 点击查看演示视频 docs/demo.mp4](docs/demo.mp4)
+<p align="center">
+  <img src="docs/demo.gif" alt="码上往生演示" />
+</p>
 
-> GitHub README 不直接渲染 mp4，点上面链接即可在仓库内播放。
+> 想看高清原片？[点此下载 demo.mp4](docs/demo.mp4)
 
 ## 这是什么
 
@@ -51,12 +53,6 @@ npm run dev                  # http://localhost:3000
 | `OPENROUTER_API_KEY` | 是 | [OpenRouter](https://openrouter.ai/keys) API Key，仅服务端使用，永不下发前端 |
 | `PROXY_URL` | 否 | 本机无法直连 openrouter.ai 时配置本地代理，如 `http://127.0.0.1:7890` |
 | `OPENROUTER_BASE_URL` | 否 | OpenRouter 兼容中转地址，默认官方 |
-
-### 一键部署 Vercel
-
-点下方按钮直达部署（记得在 Vercel 环境变量里配 `OPENROUTER_API_KEY`，**不要**配 `PROXY_URL`）：
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/1999XIAOZHANG/mashang-wangsheng)
 
 ---
 
