@@ -1,5 +1,5 @@
 import { extractJson } from "./schema";
-import { ProxyAgent, type Dispatcher } from "undici";
+import { fetch as undiciFetch, ProxyAgent, Agent, type Dispatcher } from "undici";
 
 /**
  * 网络出口配置（解决本机无法直连 openrouter.ai 的场景）：
@@ -13,12 +13,15 @@ const BASE_URL =
 const OPENROUTER_URL = `${BASE_URL}/chat/completions`;
 const DEFAULT_TIMEOUT_MS = 25_000;
 
-let proxyAgent: ProxyAgent | null = null;
-function getDispatcher(): Dispatcher | undefined {
+let proxyDispatcher: Dispatcher | null = null;
+function getDispatcher(): Dispatcher {
   const proxy = process.env.PROXY_URL || process.env.HTTPS_PROXY;
-  if (!proxy) return undefined;
-  proxyAgent ??= new ProxyAgent(proxy);
-  return proxyAgent;
+  if (proxy) {
+    proxyDispatcher ??= new ProxyAgent(proxy);
+    return proxyDispatcher;
+  }
+  // 复用 undici 默认 Agent（连接池）而非 Node 原生 fetch，避免 turbofan 行为差异
+  return new Agent({ keepAliveTimeout: 10_000, keepAliveMaxTimeout: 60_000 });
 }
 
 export class HttpError extends Error {
@@ -44,8 +47,9 @@ async function rawCall(body: RawBody, timeoutMs: number): Promise<string> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const dispatcher = getDispatcher();
-    const res = await fetch(OPENROUTER_URL, {
+    // 走 undici 自带 fetch + 自定义 dispatcher（Next.js 包装的 fetch 在 Next 15 中
+    // 对 dispatcher 的支持不可靠，改用 undici.fetch 确保代理 / 连接池稳定）
+    const res = await undiciFetch(OPENROUTER_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${key}`,
@@ -55,9 +59,8 @@ async function rawCall(body: RawBody, timeoutMs: number): Promise<string> {
       },
       body: JSON.stringify(body),
       signal: controller.signal,
-      // undici dispatcher：PROXY_URL / HTTPS_PROXY 设置时走代理（Node fetch 原生不读代理环境变量）
-      ...(dispatcher ? { dispatcher } : {}),
-    } as RequestInit);
+      dispatcher: getDispatcher(),
+    });
     if (!res.ok) {
       throw new HttpError(res.status, await res.text().catch(() => ""));
     }
